@@ -3,13 +3,10 @@ package http.server;
 import http.server.processors.Processor;
 import http.server.processors.StaticResourceProcessor;
 import http.server.processors.ServletProcessor;
-import myapp.ServletsMap;
 import http.server.servlet.AbstractServletsMap;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.net.InetAddress;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.IOException;
 
 public class HttpServer {
@@ -58,12 +55,12 @@ public class HttpServer {
     }
 
     private boolean processRequest(Socket socket) throws IOException {
-        InputStream input = socket.getInputStream();
-        OutputStream output = socket.getOutputStream();
+        var input = socket.getInputStream();
+        var output = socket.getOutputStream();
 
         // create Request object and parse
         Request request = new HttpRequest(input);
-        System.out.println(request.getRequestAsText());
+        System.out.println(request.getHeadersAsText());
         
         // create Response object
         Response response = new HttpResponse(output);
@@ -77,7 +74,7 @@ public class HttpServer {
             return SHUTDOWN;
         }
 
-        Processor processor = selectProcessor(uri);
+        var processor = selectProcessor(uri);
         processor.process(request, response);
 
         // Close the socket                

@@ -15,8 +15,13 @@ import java.io.IOException;
  */
 public class RunServer {
      public static void main(String[] args) throws IOException {
-        AbstractServletsMap servletsMap = new ServletsMap();
-        HttpServer server = new HttpServer(servletsMap);
-        server.await();
+        try {
+            AbstractServletsMap servletsMap = new ServletsMap();
+            HttpServer server = new HttpServer(servletsMap);
+            server.await();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

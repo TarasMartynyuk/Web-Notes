@@ -11,34 +11,37 @@ import java.util.Set;
 public class HttpRequest implements Request {
 
     //private final InputStream input;
-    private final String request;
-    private final String uri;
-    private final Map<String, String> parameterMap;
+    private final String _headers;
+    private final String _uri;
+    private final Map<String, String> _parameterMap;
 
     public HttpRequest(InputStream input) {
         //this.input = input;
-        this.request = convertInputStreamToString(input);
-        this.uri = parseUri(request);
-        this.parameterMap = parseParameterMap(request);
+        this._headers = convertInputStreamHeadersToString(input);
 
+        int contentLength = parseContentLengthFromHeaders();
 
+        this._uri = parseUri(_headers);
+        this._parameterMap = parseParameterMap(_headers);
     }
 
-    private String convertInputStreamToString(InputStream in) {
+    private String convertInputStreamHeadersToString(InputStream in) {
         var br = new BufferedReader(
                 new InputStreamReader(in));
 
         var fullRequest = new StringBuilder();
 
         try {
+            String line;
             while (true) {
-                String line = br.readLine();
-                if ((line == null) || line.isEmpty()) {
+
+                line = br.readLine();
+                if (line == null || line.isEmpty()) {
                     break;
                 }
 
                 fullRequest.append(line);
-                fullRequest.append("\r\n");                
+                fullRequest.append("\r\n");
             }
         } catch (IOException ex) {
             throw new RuntimeException(ex);
@@ -67,34 +70,53 @@ public class HttpRequest implements Request {
 
         String line = null;
 
-//        while (line = request)
+//        while (line = _headers)
         // TODO
         return null;
     }
 
     @Override
     public String getURI() {
-        return uri;
+        return _uri;
     }
 
     @Override
     public String getParameter(String name) {
-        return parameterMap.get(name);
+        return _parameterMap.get(name);
     }
 
     @Override
     public Set<String> getParameterNames() {
-        return parameterMap.keySet();
+        return _parameterMap.keySet();
     }
 
     @Override
     public Collection<String> getParameterValues() {
-        return parameterMap.values();
+        return _parameterMap.values();
     }
 
     @Override
-    public String getRequestAsText() {
-        return request;
+    public String getHeadersAsText() {
+        return _headers;
     }
 
+    /**
+     * @return 0 if no content length header provided, else header value
+     */
+    private int parseContentLengthFromHeaders() {
+        int headerStartIndex = _headers.indexOf("Content-Length");
+
+        if(headerStartIndex < 0) {
+            return 0;
+        }
+        int offset = 16; // + 2 for : and space
+
+        int headerEndIndex =  _headers.indexOf("\r\n", headerStartIndex);
+
+        assert  headerEndIndex > 0;
+
+        var valueStr = _headers.substring(headerStartIndex + offset, headerEndIndex);
+
+        return Integer.parseInt(valueStr);
+    }
 }
