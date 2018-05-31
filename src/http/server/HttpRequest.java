@@ -20,13 +20,15 @@ public class HttpRequest implements Request {
         this.request = convertInputStreamToString(input);
         this.uri = parseUri(request);
         this.parameterMap = parseParameterMap(request);
+
+
     }
 
     private String convertInputStreamToString(InputStream in) {
-        BufferedReader br = new BufferedReader(
+        var br = new BufferedReader(
                 new InputStreamReader(in));
 
-        StringBuilder fullRequest = new StringBuilder();
+        var fullRequest = new StringBuilder();
 
         try {
             while (true) {
@@ -62,6 +64,10 @@ public class HttpRequest implements Request {
     }
 
     private Map<String, String> parseParameterMap(String request) {
+
+        String line = null;
+
+//        while (line = request)
         // TODO
         return null;
     }

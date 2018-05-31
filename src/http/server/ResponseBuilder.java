@@ -13,9 +13,9 @@ public class ResponseBuilder {
         _out = writer;
     }
 
-    public void WriteOkResponce(String response) {
+    public void WriteOkResponce(String response, String contentType) {
         writeOkHeader();
-        writeContentHeaders(response.length());
+        writeContentHeaders(response.length(), contentType);
         _out.write(response);
         writeConnectionClosed();
         _out.flush();
@@ -25,9 +25,9 @@ public class ResponseBuilder {
         _out.write("HTTP/1.1 200 OK\r\n");
     }
 
-    private void writeContentHeaders(int contentLength) {
+    private void writeContentHeaders(int contentLength, String contentType) {
         _out.write("Content-Length: " + contentLength + "\r\n");
-        _out.write("Content-Type: text/html\r\n\r\n");
+        _out.write("Content-Type: " + contentType + "\r\n\r\n");
     }
 
     private void writeConnectionClosed() {
