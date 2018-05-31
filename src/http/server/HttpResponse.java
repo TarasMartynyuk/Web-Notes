@@ -58,5 +58,4 @@ public class HttpResponse implements Response {
         PrintWriter writer = new PrintWriter(output, true);
         return writer;
     }
-
 }

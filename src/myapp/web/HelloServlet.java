@@ -1,11 +1,11 @@
 package myapp.web;
 
 
+import http.server.ResponseBuilder;
 import http.server.servlet.AbstractServlet;
 import http.server.Request;
 import http.server.Response;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  *
@@ -15,10 +15,16 @@ public class HelloServlet extends AbstractServlet  {
 
     @Override
     public void service(Request req, Response res) throws IOException {
-        PrintWriter out = res.getWriter();
-        out.println("Hello from Servlet");
-        out.close();
+        var responce = "Hello from Servlet";
+
+        var builder = new ResponseBuilder(res);
+        builder.WriteOkResponce(responce);
+
+        res.getWriter().close();
+
     }
+
+
 
    
 
