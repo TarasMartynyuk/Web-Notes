@@ -52,7 +52,6 @@ public class HttpRequestReader {
         if(contentLength < 0) {
             throw new IllegalArgumentException("contentLength must be >= 0");
         }
-        System.out.println("\nreading body\n");
 
         var chars = new char[contentLength];
         _bufferedIn.read(chars, 0, chars.length);

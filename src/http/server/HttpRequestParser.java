@@ -1,4 +1,5 @@
 package http.server;
+import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequestParser {
@@ -41,12 +42,29 @@ public class HttpRequestParser {
         return Integer.parseInt(valueStr);
     }
 
-    public Map<String, String> parseBody(String body) {
+    public Map<String, String> parseBody(String bodyString) {
+        // quick way
+        var paramPairStrings = bodyString.split("&");
+        var body = new HashMap<String, String >();
 
-        String line = null;
+        for (var pair : paramPairStrings) {
+            var keyValueStrings = pair.split("=");
 
-//        while (line = _headers)
-        // TODO
-        return null;
+            if(keyValueStrings.length == 1) {
+                throw new IllegalArgumentException("every key in body must have a matching value, separated by =");
+            }
+
+            assert keyValueStrings.length == 2;
+            if(keyValueStrings[0].isEmpty()) {
+                throw new IllegalArgumentException("empty key fo value: " + keyValueStrings[1]);
+            }
+            if(keyValueStrings[1].isEmpty()) {
+                throw new IllegalArgumentException("empty value fo key: " + keyValueStrings[0]);
+            }
+
+            body.put(keyValueStrings[0], keyValueStrings[1]);
+        }
+
+        return body;
     }
 }

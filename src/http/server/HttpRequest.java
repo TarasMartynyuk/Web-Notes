@@ -18,18 +18,14 @@ public class HttpRequest implements Request {
     public HttpRequest(InputStream input) throws IOException {
         var parser = new HttpRequestParser();
         var reader = new HttpRequestReader(input);
-//        _headers = "headers";
+
         _headers = reader.readHeaders();
-
-
-        System.out.println("headers are : " + _headers);
         int contentLength = parser.parseContentLengthFromHeaders(_headers);
 
         this._uri = parser.parseUri(_headers);
 
         _body = contentLength == 0 ?
                 null : reader.readBody(contentLength);
-//        _body = null;
 
         this._bodyMap = parser.parseBody(_headers);
     }
