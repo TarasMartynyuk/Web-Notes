@@ -21,24 +21,24 @@ public class HttpRequestReader {
      * to the start of next line after the blank line
      */
     public String readHeaders() throws IOException {
+        // not closing any stream that uses socket input stream here
+        var reader = wrapIn();
+        var fullRequest = new StringBuilder();
 
-        try(var reader = wrapIn()) {
-            var fullRequest = new StringBuilder();
-                String line;
-                while (true) {
+        String line;
+        while (true) {
 
-                    line = reader.readLine();
-                    if (line == null || line.isEmpty()) {
-                        break;
-                    }
+            line = reader.readLine();
+            if (line == null || line.isEmpty()) {
+                break;
+            }
 
-                    fullRequest.append(line);
-                    fullRequest.append("\r\n");
-                }
-
-            assert fullRequest.toString().contains("HTTP");
-            return fullRequest.toString();
+            fullRequest.append(line);
+            fullRequest.append("\r\n");
         }
+
+        assert fullRequest.toString().contains("HTTP");
+        return fullRequest.toString();
     }
 
     /**
@@ -51,14 +51,14 @@ public class HttpRequestReader {
 //            throw new IllegalArgumentException("contentLength must be >= 0");
 //        }
 
+        var reader = wrapIn();
         var builder = new StringBuilder();
-        try(var reader = wrapIn()) {
-            char[] charBuffer = new char[1024];
-            int bytesRead;
 
-            while ((bytesRead = reader.read(charBuffer)) > 0) {
-                builder.append(charBuffer, 0, bytesRead);
-            }
+        char[] charBuffer = new char[1024];
+        int bytesRead;
+
+        while ((bytesRead = reader.read(charBuffer)) > 0) {
+            builder.append(charBuffer, 0, bytesRead);
         }
 
         return builder.toString();
