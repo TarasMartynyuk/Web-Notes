@@ -60,7 +60,7 @@ public class HttpServer {
 
         // create Request object and parse
         Request request = new HttpRequest(input);
-        System.out.println(request.getHeadersAsText());
+        System.out.println(request.getRequestAsText());
         
         // create Response object
         Response response = new HttpResponse(output);

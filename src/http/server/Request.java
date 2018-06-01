@@ -20,7 +20,7 @@ public interface Request {
 
     Collection<String> getParameterValues();
     
-    String getHeadersAsText();
+    String getRequestAsText();
 
     String getURI();
     
