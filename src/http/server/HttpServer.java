@@ -4,6 +4,8 @@ import http.server.processors.Processor;
 import http.server.processors.StaticResourceProcessor;
 import http.server.processors.ServletProcessor;
 import http.server.servlet.AbstractServletsMap;
+
+import java.io.InputStream;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.net.InetAddress;
@@ -54,15 +56,34 @@ public class HttpServer {
         serverSocket.close();
     }
 
+
+    void test(InputStream in) throws IOException {
+        var twoBytes = new byte[2];
+        int inLine = 0;
+        while (true) {
+
+            if(in.read(twoBytes, 0, twoBytes.length) == -1) {
+                System.out.println("EOF!");
+                break;
+            }
+
+            System.out.print(new String(twoBytes, "UTF-8"));
+            inLine += 2;
+            if(inLine >= 80) {
+                System.out.print("\n");
+            }
+        }
+    }
+
     private boolean processRequest(Socket socket) throws IOException {
         var input = socket.getInputStream();
         var output = socket.getOutputStream();
 
-        // create Request object and parse
+        test(input);
+
         Request request = new HttpRequest(input);
         System.out.println(request.getRequestAsText());
-        
-        // create Response object
+
         Response response = new HttpResponse(output);
 
         String uri = request.getURI();
@@ -77,7 +98,7 @@ public class HttpServer {
         var processor = selectProcessor(uri);
         processor.process(request, response);
 
-        // Close the socket                
+        // Close the socket
         socket.close();
 
         return !SHUTDOWN;

@@ -1,9 +1,6 @@
 package http.server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class HttpRequestReader {
     private final InputStream _in;
@@ -22,7 +19,7 @@ public class HttpRequestReader {
      */
     public String readHeaders() throws IOException {
         // not closing any stream that uses socket input stream here
-        var reader = wrapIn();
+        var reader = new BufferedReader(new InputStreamReader(_in));
         var fullRequest = new StringBuilder();
 
         String line;
@@ -35,6 +32,9 @@ public class HttpRequestReader {
 
             fullRequest.append(line);
             fullRequest.append("\r\n");
+
+            System.out.println(line);
+            System.out.println("\r\n");
         }
 
         assert fullRequest.toString().contains("HTTP");
@@ -44,27 +44,36 @@ public class HttpRequestReader {
     /**
      * the headers must be read from InputStream _in before reading body
      * reads all remaining characters from inputstream
-     * @return
+     *
+     * interprets bytes as UTF-8 encoded
      */
-    public String readBody() throws IOException {
-//        if(contentLength < 0) {
-//            throw new IllegalArgumentException("contentLength must be >= 0");
-//        }
-
-        var reader = wrapIn();
-        var builder = new StringBuilder();
-
-        char[] charBuffer = new char[1024];
-        int bytesRead;
-
-        while ((bytesRead = reader.read(charBuffer)) > 0) {
-            builder.append(charBuffer, 0, bytesRead);
+    public String readBody(int contentLength) throws IOException {
+        if(contentLength < 0) {
+            throw new IllegalArgumentException("contentLength must be >= 0");
         }
 
-        return builder.toString();
-    }
+//        var dataStream = new DataInputStream(_in);
+////        var builder = new StringBuilder();
+//
+//        var bodyBytes = new byte[contentLength];
+//        // blocks until bodyBytes is fully read into, throws on EOF
+//        dataStream.readFully(bodyBytes);
+//
+//        return new String (bodyBytes, "UTF-8");
 
-    private BufferedReader wrapIn() {
-        return new BufferedReader(new InputStreamReader(_in));
+        int c;
+        int read=0;
+        byte[] buffer=new byte[1024];
+
+        while((c = _in.read(buffer,0,1024))!=-1)
+        {
+            read+=c;
+            //Do something with the readed content into the buffer, for example print it!
+            System.out.println(new String(buffer,0,c));
+            if(read>=contentLength)
+                break;
+        }
+        return new String (buffer, "UTF-8");
+
     }
 }

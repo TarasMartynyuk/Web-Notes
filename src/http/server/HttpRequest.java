@@ -18,16 +18,26 @@ public class HttpRequest implements Request {
     public HttpRequest(InputStream input) throws IOException {
         var parser = new HttpRequestParser();
         var reader = new HttpRequestReader(input);
-
+//        _headers = "headers";
         _headers = reader.readHeaders();
-
         int contentLength = parser.parseContentLengthFromHeaders(_headers);
 
         this._uri = parser.parseUri(_headers);
 
-        _body = contentLength == 0 ?
-                null : reader.readBody();
+//        _body = contentLength == 0 ?
+//                null : reader.readBody(contentLength);
+
+
+//        if(contentLength != 0) {
+//            var bytes = new byte[1];
+//            int res = input.readNBytes(bytes, 0, 1);
+//
+//            System.out.println(new String(bytes, "UTF-8"));
+//        }
+
         this._bodyMap = parser.parseBody(_headers);
+
+        _body = null;
     }
 
     @Override
