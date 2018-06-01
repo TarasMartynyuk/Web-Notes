@@ -1,12 +1,15 @@
 package http.server;
-
 import java.io.*;
 
+
+/**
+ * assumes it is the only one reading from InputStream
+ */
 public class HttpRequestReader {
-    private final InputStream _in;
+    private final BufferedReader _bufferedIn;
 
     public HttpRequestReader(InputStream in) {
-        _in = in;
+        _bufferedIn = new BufferedReader(new InputStreamReader(in));
     }
 
     // should be parsed as a map, but i don't need it now
@@ -19,22 +22,20 @@ public class HttpRequestReader {
      */
     public String readHeaders() throws IOException {
         // not closing any stream that uses socket input stream here
-        var reader = new BufferedReader(new InputStreamReader(_in));
         var fullRequest = new StringBuilder();
 
         String line;
         while (true) {
 
-            line = reader.readLine();
+            line = _bufferedIn.readLine();
+            System.out.println(line);
+
             if (line == null || line.isEmpty()) {
                 break;
             }
 
             fullRequest.append(line);
             fullRequest.append("\r\n");
-
-            System.out.println(line);
-            System.out.println("\r\n");
         }
 
         assert fullRequest.toString().contains("HTTP");
@@ -51,29 +52,30 @@ public class HttpRequestReader {
         if(contentLength < 0) {
             throw new IllegalArgumentException("contentLength must be >= 0");
         }
+        System.out.println("\nreading body\n");
 
-//        var dataStream = new DataInputStream(_in);
-////        var builder = new StringBuilder();
-//
-//        var bodyBytes = new byte[contentLength];
-//        // blocks until bodyBytes is fully read into, throws on EOF
-//        dataStream.readFully(bodyBytes);
-//
-//        return new String (bodyBytes, "UTF-8");
+        var chars = new char[contentLength];
+        _bufferedIn.read(chars, 0, chars.length);
 
-        int c;
-        int read=0;
-        byte[] buffer=new byte[1024];
+        return new String(chars);
+    }
 
-        while((c = _in.read(buffer,0,1024))!=-1)
-        {
-            read+=c;
-            //Do something with the readed content into the buffer, for example print it!
-            System.out.println(new String(buffer,0,c));
-            if(read>=contentLength)
+    public void writeAll(InputStream in) throws IOException {
+        var twoBytes = new byte[2];
+        int inLine = 0;
+        while (true) {
+
+            if(in.read(twoBytes, 0, twoBytes.length) == -1) {
+                System.out.println("EOF!");
                 break;
-        }
-        return new String (buffer, "UTF-8");
+            }
 
+            System.out.print(new String(twoBytes, "UTF-8"));
+        }
+    }
+
+    private boolean isCarriageReturn(byte[] bytes) {
+        return bytes[0] == '\r' &&
+                bytes[1] == '\n';
     }
 }
