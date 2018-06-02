@@ -13,6 +13,8 @@ import java.net.Socket;
 import java.net.ServerSocket;
 import java.net.InetAddress;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HttpServer {
 
@@ -25,38 +27,36 @@ public class HttpServer {
     // shutdown command
     private static final String SHUTDOWN_COMMAND = "/SHUTDOWN";
     private static final boolean SHUTDOWN = true;
+    private static final int PORT = 8888;
 
     private final AbstractServletsMap servletsMap;
+
+    private final ExecutorService _threadPool = Executors.newFixedThreadPool(5);
     
     public HttpServer(AbstractServletsMap servletsMap) {
         this.servletsMap = servletsMap;
     }
     
     public void await() throws IOException {
-        ServerSocket serverSocket = null;
-        int port = 8888;
-        try {
-            serverSocket = new ServerSocket(port, 1, InetAddress.getByName("127.0.0.1"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }        
-        
-        System.out.println("Server is waiting for request at port: " + port);
-        servletsMap.callInit();
-        boolean isShutDown = !SHUTDOWN;
-        // Loop waiting for a request
-        while (!isShutDown) {
-            try {
-                Socket socket = serverSocket.accept();
-                isShutDown = processRequest(socket);
 
-            } catch (Exception e) {
-                e.printStackTrace();
+        try (var serverSocket = startServerSocket()) {
+            System.out.println("Server is waiting for request at port: " + PORT);
+            servletsMap.callInit();
+            boolean isShutDown = !SHUTDOWN;
+
+            assert serverSocket != null;
+            // Loop waiting for a request
+            while (!isShutDown) {
+                try {
+                    Socket socket = serverSocket.accept();
+                    isShutDown = processRequest(socket);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+            servletsMap.callDestroy();
         }
-        servletsMap.callDestroy();
-        serverSocket.close();
     }
 
     private boolean processRequest(Socket socket) throws IOException {
@@ -105,5 +105,15 @@ public class HttpServer {
             processor = new StaticResourceProcessor();
         }
         return processor;
+    }
+
+    private ServerSocket startServerSocket() {
+        try {
+            return new ServerSocket(PORT, 1, InetAddress.getByName("127.0.0.1"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+            return null;
+        }
     }
 }
