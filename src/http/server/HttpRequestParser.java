@@ -30,12 +30,12 @@ public class HttpRequestParser {
             throw new IllegalArgumentException("headers does not contain a single space");
         }
 
-        var methodString = headers.substring(0, methodEndIndex);
+        var methodString = headers.substring(0, methodEndIndex).toUpperCase();
 
         switch (methodString) {
             case "GET":
                 return Method.GET;
-            case "POSt":
+            case "POST":
                 return Method.POST;
             default: return null;
         }

@@ -20,6 +20,8 @@ public interface Request {
 
     String getParameter(String name);
 
+    String getParameterOrNull(String name);
+
     Set<String> getParameterNames();
 
     Collection<String> getParameterValues();

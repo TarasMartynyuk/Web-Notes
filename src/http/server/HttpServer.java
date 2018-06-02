@@ -57,6 +57,8 @@ public class HttpServer {
     }
 
     private boolean processRequest(Socket socket) throws IOException {
+        System.out.println("processing socket : " + socket.toString());
+
         var input = socket.getInputStream();
         var output = socket.getOutputStream();
 

@@ -20,6 +20,10 @@ public class HttpRequest implements Request {
         var reader = new HttpRequestReader(input);
 
         _headers = reader.readHeaders();
+        if(_headers.isEmpty()) {
+            throw new IllegalArgumentException("stream contains empty headers - the first line is empty");
+        }
+
         _uri = parser.parseUri(_headers);
         _method = parser.parseMethod(_headers);
         if(_method == null) {
@@ -50,6 +54,11 @@ public class HttpRequest implements Request {
     public String getParameter(String name) {
         return _bodyParams.get(name);
     }
+
+    public String getParameterOrNull(String name){
+        return _bodyParams.getOrDefault(name, null);
+    }
+
 
     @Override
     public Set<String> getParameterNames() {
