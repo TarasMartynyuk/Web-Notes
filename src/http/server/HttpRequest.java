@@ -13,14 +13,20 @@ public class HttpRequest implements Request {
     private final String _uri;
     private final Map<String, String> _bodyParams;
 
+    private final Method _method;
+
     public HttpRequest(InputStream input) throws IOException {
         var parser = new HttpRequestParser();
         var reader = new HttpRequestReader(input);
 
         _headers = reader.readHeaders();
-        int contentLength = parser.parseContentLengthFromHeaders(_headers);
+        _uri = parser.parseUri(_headers);
+        _method = parser.parseMethod(_headers);
+        if(_method == null) {
+            throw new IllegalArgumentException("invalid HTTP header - missing method");
+        }
 
-        this._uri = parser.parseUri(_headers);
+        int contentLength = parser.parseContentLengthFromHeaders(_headers);
 
         if(contentLength > 0) {
             _body = reader.readBody(contentLength);
@@ -31,10 +37,14 @@ public class HttpRequest implements Request {
         }
     }
 
+    //region getters
+
     @Override
     public String getURI() {
         return _uri;
     }
+
+    public Method getMethod() { return _method; }
 
     @Override
     public String getParameter(String name) {
@@ -54,5 +64,5 @@ public class HttpRequest implements Request {
     @Override
     public String getRequestAsText() {
         return _headers + "\n" + _body;
-    }
+    }//endregion
 }

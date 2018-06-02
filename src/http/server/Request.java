@@ -14,14 +14,15 @@ import java.util.Set;
  */
 public interface Request {
 
+    String getURI();
+
+    Method getMethod();
+
     String getParameter(String name);
 
     Set<String> getParameterNames();
 
     Collection<String> getParameterValues();
-    
-    String getRequestAsText();
 
-    String getURI();
-    
+    String getRequestAsText();
 }
