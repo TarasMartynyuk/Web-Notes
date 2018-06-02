@@ -24,5 +24,7 @@ public class NotesAdditionServlet extends AbstractServlet {
         }
 
         NotesContainer.getInstance().addNote(note);
+
+        res.sendStaticResource("/index.html");
     }
 }

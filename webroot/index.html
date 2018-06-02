@@ -1,15 +1,17 @@
 <html>
     <head>
-        <title>Welcome to BrainySoftware</title>
+        <title>Web Notes</title>
     </head>
     <body>
         <br>
-        Welcome to BrainySoftware.
-        <p><a href="/servlet/test">PrimitiveServlet</a></p>
+        Welcome to Web Notes app!
         <p><form action="servlet/notes.add" method="post">
-                Note text: <input type="text" name="note"><br>
+                Add note: <input type="text" name="note"><br>
                 <input type="submit" value="Submit">
             </form>
         </p>
+
+
+        <a href="/servlet/notes.list">list my notes</a>
     </body>
 </html>
