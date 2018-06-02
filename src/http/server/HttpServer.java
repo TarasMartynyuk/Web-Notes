@@ -56,33 +56,12 @@ public class HttpServer {
         serverSocket.close();
     }
 
-
-//    void writeAll(InputStream in) throws IOException {
-//        var twoBytes = new byte[2];
-//        int inLine = 0;
-//        while (true) {
-//
-//            if(in.read(twoBytes, 0, twoBytes.length) == -1) {
-//                System.out.println("EOF!");
-//                break;
-//            }
-//
-//            System.out.print(new String(twoBytes, "UTF-8"));
-//            inLine += 2;
-//            if(inLine >= 80) {
-//                System.out.print("\n");
-//            }
-//        }
-//    }
-
     private boolean processRequest(Socket socket) throws IOException {
         var input = socket.getInputStream();
         var output = socket.getOutputStream();
 
-//        writeAll(input);
-
         Request request = new HttpRequest(input);
-//        System.out.println(request.getRequestAsText());
+        System.out.println(request.getRequestAsText() + "\n");
 
         Response response = new HttpResponse(output);
 
@@ -98,7 +77,6 @@ public class HttpServer {
         var processor = selectProcessor(uri);
         processor.process(request, response);
 
-        // Close the socket
         socket.close();
 
         return !SHUTDOWN;

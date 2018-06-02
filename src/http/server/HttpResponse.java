@@ -1,12 +1,13 @@
 package http.server;
 
+import myapp.ResponseBuilder;
+
 import java.io.OutputStream;
 import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 public class HttpResponse implements Response {
 

@@ -26,9 +26,7 @@ public class HttpRequestReader {
 
         String line;
         while (true) {
-
             line = _bufferedIn.readLine();
-            System.out.println(line);
 
             if (line == null || line.isEmpty()) {
                 break;

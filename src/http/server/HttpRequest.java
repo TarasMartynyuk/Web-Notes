@@ -1,9 +1,7 @@
 package http.server;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -13,7 +11,7 @@ public class HttpRequest implements Request {
     private final String _headers;
     private final String _body;
     private final String _uri;
-    private final Map<String, String> _bodyMap;
+    private final Map<String, String> _bodyParams;
 
     public HttpRequest(InputStream input) throws IOException {
         var parser = new HttpRequestParser();
@@ -24,10 +22,13 @@ public class HttpRequest implements Request {
 
         this._uri = parser.parseUri(_headers);
 
-        _body = contentLength == 0 ?
-                null : reader.readBody(contentLength);
-
-        this._bodyMap = parser.parseBody(_headers);
+        if(contentLength > 0) {
+            _body = reader.readBody(contentLength);
+            _bodyParams = parser.parseBody(_body);
+        } else {
+            _body = null;
+            _bodyParams = null;
+        }
     }
 
     @Override
@@ -37,17 +38,17 @@ public class HttpRequest implements Request {
 
     @Override
     public String getParameter(String name) {
-        return _bodyMap.get(name);
+        return _bodyParams.get(name);
     }
 
     @Override
     public Set<String> getParameterNames() {
-        return _bodyMap.keySet();
+        return _bodyParams.keySet();
     }
 
     @Override
     public Collection<String> getParameterValues() {
-        return _bodyMap.values();
+        return _bodyParams.values();
     }
 
     @Override

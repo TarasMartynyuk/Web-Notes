@@ -1,4 +1,6 @@
-package http.server;
+package myapp;
+import http.server.Response;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 

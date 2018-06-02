@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 public class HttpRequestParserTests {
+    //region body mocks
 
     static final String key1 = "key1";
     static final String value1 = "value1";
@@ -20,7 +21,7 @@ public class HttpRequestParserTests {
 
     static final String EMPTY_KEY_BODY = VALID_BODY_SINGLE_PARAM + "&=" + value1;
     static final String EMPTY_VALUE_BODY = VALID_BODY_SINGLE_PARAM + "&" + key1 + "=";
-
+    //endregion
 
     HttpRequestParser _testInstance;
 

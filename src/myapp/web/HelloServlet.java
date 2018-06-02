@@ -1,7 +1,7 @@
 package myapp.web;
 
 
-import http.server.ResponseBuilder;
+import myapp.ResponseBuilder;
 import http.server.servlet.AbstractServlet;
 import http.server.Request;
 import http.server.Response;
