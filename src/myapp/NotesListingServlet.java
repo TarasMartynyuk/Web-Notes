@@ -1,7 +1,7 @@
 package myapp;
 
-import http.server.Request;
-import http.server.Response;
+import http.server.request.Request;
+import http.server.response.Response;
 import http.server.servlet.AbstractServlet;
 import java.io.IOException;
 

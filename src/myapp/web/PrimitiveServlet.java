@@ -2,8 +2,8 @@ package myapp.web;
 
 
 import http.server.servlet.AbstractServlet;
-import http.server.Request;
-import http.server.Response;
+import http.server.request.Request;
+import http.server.response.Response;
 import java.io.IOException;
 import java.io.PrintWriter;
 

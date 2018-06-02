@@ -1,7 +1,7 @@
 package http.server.processors;
 
-import http.server.Request;
-import http.server.Response;
+import http.server.request.Request;
+import http.server.response.Response;
 import java.io.IOException;
 
 public class StaticResourceProcessor implements Processor {

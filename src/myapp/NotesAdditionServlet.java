@@ -1,8 +1,8 @@
 package myapp;
 
 import http.server.Method;
-import http.server.Request;
-import http.server.Response;
+import http.server.request.Request;
+import http.server.response.Response;
 import http.server.servlet.*;
 
 import java.io.IOException;

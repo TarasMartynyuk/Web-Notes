@@ -1,5 +1,4 @@
-import http.server.HttpRequestParser;
-import http.server.HttpRequestReader;
+import http.server.request.HttpRequestParser;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;

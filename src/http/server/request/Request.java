@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package http.server;
+package http.server.request;
+
+import http.server.Method;
 
 import java.util.Collection;
 import java.util.Set;

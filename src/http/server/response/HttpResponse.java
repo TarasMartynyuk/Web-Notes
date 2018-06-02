@@ -1,5 +1,6 @@
-package http.server;
+package http.server.response;
 
+import http.server.Constants;
 import myapp.ResponseBuilder;
 
 import java.io.OutputStream;

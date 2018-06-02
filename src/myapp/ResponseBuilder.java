@@ -1,5 +1,5 @@
 package myapp;
-import http.server.Response;
+import http.server.response.Response;
 
 import java.io.IOException;
 import java.io.PrintWriter;

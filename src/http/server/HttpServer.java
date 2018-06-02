@@ -3,9 +3,12 @@ package http.server;
 import http.server.processors.Processor;
 import http.server.processors.StaticResourceProcessor;
 import http.server.processors.ServletProcessor;
+import http.server.request.HttpRequest;
+import http.server.request.Request;
+import http.server.response.HttpResponse;
+import http.server.response.Response;
 import http.server.servlet.AbstractServletsMap;
 
-import java.io.InputStream;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.net.InetAddress;

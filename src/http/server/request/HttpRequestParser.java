@@ -1,4 +1,6 @@
-package http.server;
+package http.server.request;
+import http.server.Method;
+
 import java.util.HashMap;
 import java.util.Map;
 
