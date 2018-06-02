@@ -24,10 +24,21 @@ public class NotesListingServlet extends AbstractServlet {
 
         var responseBuilder = new ResponseBuilder(res);
 
-        responseBuilder.WriteOkResponce(PAGE_HEAD + PAGE_FOOTER, "text/html");
+        responseBuilder.WriteOkResponce(generateListPage(NotesContainer.getInstance()), "text/html");
     }
 
-//    private String generateNoteParagraph(String note) {
-//
-//    }
+    private String generateListPage(Iterable<String> notes) {
+        var builder = new StringBuilder(PAGE_HEAD);
+
+        for(var note : notes) {
+            builder.append(generateNoteParagraph(note));
+        }
+
+        builder.append(PAGE_FOOTER);
+        return builder.toString();
+    }
+
+    private String generateNoteParagraph(String note) {
+        return "<p>" + note + "</p>";
+    }
 }
