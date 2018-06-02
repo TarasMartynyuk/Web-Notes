@@ -52,45 +52,48 @@ public class NotesContainerTests {
     }
 
 //    @Test
-    public void AddNote_MustBeLocked_IfIterationInProgress() throws InterruptedException, ExecutionException {
-
-        long iterDuration = 1000;
-        long totalIterDuration = _testInstance.size() * iterDuration;
-
-        Runnable iteration = () -> {
-            for(String note : _testInstance.listNotes()) {
-                try {
-                    Thread.sleep(iterDuration);
-                    System.out.println("iter done for : " + note);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        Callable<Long> addingNote = () -> {
-            long startTime = System.currentTimeMillis();
-
-//            Thread.sleep(3000);
-
-          _testInstance.addNote("New Note");
-            long endTime = System.currentTimeMillis();
-
-            return endTime - startTime;
-        };
-
-        var iterThread = new Thread(iteration);
-        iterThread.start();
-        var addNoteTask =  Executors.newSingleThreadExecutor().submit(addingNote);
-
-        long additionDuration = addNoteTask.get();
-        iterThread.join();
-
-        long tollerance = 50;
-        Assert.assertTrue(additionDuration + tollerance >= iterDuration);
-    }
-
-//    @Test
-    public void ForEach_IfAddingNotesInParallelWithIterating_IteratedValuesRemainUnchanged() {
-    }
+//    public void AddNote_MustBeLocked_IfIterationInProgress() throws InterruptedException, ExecutionException {
+//
+//        long iterDuration = 1000;
+//        long totalIterDuration = _testInstance.size() * iterDuration;
+//        long tolerance = 50;
+//
+//        Runnable iteration = () -> {
+//
+//            for(String note : _testInstance.listNotes()) {
+//                System.out.println("iter started");
+//                try {
+//                    Thread.sleep(iterDuration);
+//                    System.out.println("iter done for : " + note);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+//
+//        Callable<Long> addingNote = () -> {
+//            long startTime = System.currentTimeMillis();
+//
+//            // make sure that iteration has started
+//            Thread.sleep(tolerance / 4);
+//            System.out.println("add note started");
+//            _testInstance.addNote("New Note");
+//            long endTime = System.currentTimeMillis();
+//
+//            return endTime - startTime;
+//        };
+//
+//        var iterThread = new Thread(iteration);
+//        iterThread.start();
+//        var addNoteTask =  Executors.newSingleThreadExecutor().submit(addingNote);
+//
+//        long additionDuration = addNoteTask.get();
+//        iterThread.join();
+//
+//        Assert.assertTrue(additionDuration + tolerance >= totalIterDuration);
+//    }
+//
+////    @Test
+//    public void ForEach_IfAddingNotesInParallelWithIterating_IteratedValuesRemainUnchanged() {
+//    }
 }

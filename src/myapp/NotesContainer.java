@@ -17,11 +17,11 @@ public class NotesContainer{
         _notes = new ArrayList<>();
     }
 
-    public void addNote(String note) {
+    public synchronized void addNote(String note) {
         _notes.add(note);
     }
 
-    public Iterable<String> listNotes() {
+    public synchronized Iterable<String> listNotes() {
         var notesCopy = new ArrayList<String >(size());
 
         for (int i = 0, last = size() - 1; i < size(); i++) {
@@ -30,32 +30,15 @@ public class NotesContainer{
         }
         return notesCopy;
     }
-
-    // TODO : is it possible to make deferred iteration thread safe?
-//    private Iterator<String> iterator() {
-//        return new Iterator<String>() i{
-//
-//            int index = _notes.size();
-//
-//            @Override
-//            public boolean hasNext() {
-//                return index != 0;
-//            }
-//
-//            @Override
-//            public String next() {
-//                if(!hasNext()) {
-//                    throw new NoSuchElementException();
-//                }
-//
-//                return _notes.get(--index);
-//            }
-//        };
-//    }
-
+    
     public int size() { return _notes.size(); }
 
     public void clear() {
         _notes.clear();
     }
+
+    // TODO : is it possible to make deferred iteration thread safe?
+//    private Iterator<String> iterator() {
+
+
 }
