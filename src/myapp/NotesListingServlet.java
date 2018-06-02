@@ -24,7 +24,8 @@ public class NotesListingServlet extends AbstractServlet {
 
         var responseBuilder = new ResponseBuilder(res);
 
-        responseBuilder.WriteOkResponce(generateListPage(NotesContainer.getInstance()), "text/html");
+        responseBuilder.WriteOkResponce(generateListPage(
+                NotesContainer.getInstance().listNotes()), "text/html");
     }
 
     private String generateListPage(Iterable<String> notes) {

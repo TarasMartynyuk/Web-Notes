@@ -3,43 +3,44 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+
 public class NotesContainerTests {
+
+    static final String FIRST_NOTE = "First";
+    static final String SECOND_NOTE = "Second";
+    static final String THIRD_NOTE = "Third";
 
     NotesContainer _testInstance = NotesContainer.getInstance();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         _testInstance.clear();
+
+        _testInstance.addNote(FIRST_NOTE);
+        _testInstance.addNote(SECOND_NOTE);
+        _testInstance.addNote(THIRD_NOTE);
     }
 
     @Test
     public void ForEach_LastElement_MustBeFirstInsertedNote() {
 
-        var firstNote = "First";
-        _testInstance.addNote(firstNote);
-        _testInstance.addNote("Second");
-        _testInstance.addNote("Third");
-
-
         String lastIterNote = null;
-        for (String note : _testInstance) {
+        for (String note : _testInstance.listNotes()) {
             lastIterNote = note;
         }
 
-        Assert.assertEquals(lastIterNote, firstNote);
+        Assert.assertEquals(lastIterNote, FIRST_NOTE);
     }
 
     @Test
     public void ForEach_FirstElement_MustBeLastInsertedNote() {
-        var lastNote = "Last";
-        _testInstance.addNote("First");
-        _testInstance.addNote("Second");
-        _testInstance.addNote("Third");
-        _testInstance.addNote(lastNote);
 
         boolean firstRead = false;
         String firstIterNote = null;
-        for (String note : _testInstance) {
+        for (String note : _testInstance.listNotes()) {
 
             if(! firstRead) {
                 firstIterNote = note;
@@ -47,6 +48,49 @@ public class NotesContainerTests {
             }
         }
 
-        Assert.assertEquals(firstIterNote, lastNote);
+        Assert.assertEquals(firstIterNote, THIRD_NOTE);
+    }
+
+//    @Test
+    public void AddNote_MustBeLocked_IfIterationInProgress() throws InterruptedException, ExecutionException {
+
+        long iterDuration = 1000;
+        long totalIterDuration = _testInstance.size() * iterDuration;
+
+        Runnable iteration = () -> {
+            for(String note : _testInstance.listNotes()) {
+                try {
+                    Thread.sleep(iterDuration);
+                    System.out.println("iter done for : " + note);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Callable<Long> addingNote = () -> {
+            long startTime = System.currentTimeMillis();
+
+//            Thread.sleep(3000);
+
+          _testInstance.addNote("New Note");
+            long endTime = System.currentTimeMillis();
+
+            return endTime - startTime;
+        };
+
+        var iterThread = new Thread(iteration);
+        iterThread.start();
+        var addNoteTask =  Executors.newSingleThreadExecutor().submit(addingNote);
+
+        long additionDuration = addNoteTask.get();
+        iterThread.join();
+
+        long tollerance = 50;
+        Assert.assertTrue(additionDuration + tollerance >= iterDuration);
+    }
+
+//    @Test
+    public void ForEach_IfAddingNotesInParallelWithIterating_IteratedValuesRemainUnchanged() {
     }
 }

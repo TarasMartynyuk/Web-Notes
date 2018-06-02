@@ -3,7 +3,7 @@ package myapp;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class NotesContainer implements Iterable<String> {
+public class NotesContainer{
 
     private static NotesContainer ourInstance = new NotesContainer();
     private ArrayList<String> _notes;
@@ -21,27 +21,39 @@ public class NotesContainer implements Iterable<String> {
         _notes.add(note);
     }
 
-    @Override
-    public Iterator<String> iterator() {
-        return new Iterator<String>() {
+    public Iterable<String> listNotes() {
+        var notesCopy = new ArrayList<String >(size());
 
-            int index = _notes.size();
+        for (int i = 0, last = size() - 1; i < size(); i++) {
 
-            @Override
-            public boolean hasNext() {
-                return index != 0;
-            }
-
-            @Override
-            public String next() {
-                if(!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-
-                return _notes.get(--index);
-            }
-        };
+            notesCopy.add(i, _notes.get(last - i));
+        }
+        return notesCopy;
     }
+
+    // TODO : is it possible to make deferred iteration thread safe?
+//    private Iterator<String> iterator() {
+//        return new Iterator<String>() i{
+//
+//            int index = _notes.size();
+//
+//            @Override
+//            public boolean hasNext() {
+//                return index != 0;
+//            }
+//
+//            @Override
+//            public String next() {
+//                if(!hasNext()) {
+//                    throw new NoSuchElementException();
+//                }
+//
+//                return _notes.get(--index);
+//            }
+//        };
+//    }
+
+    public int size() { return _notes.size(); }
 
     public void clear() {
         _notes.clear();

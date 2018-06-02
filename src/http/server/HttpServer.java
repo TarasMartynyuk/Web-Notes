@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static java.lang.Thread.sleep;
+
 public class HttpServer {
 
     /**
@@ -49,7 +51,14 @@ public class HttpServer {
             while (!isShutDown) {
                 try {
                     Socket socket = serverSocket.accept();
-                    isShutDown = processRequest(socket);
+
+                    _threadPool.execute(() -> {
+                        try {
+                            boolean res = processRequest(socket);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -66,7 +75,7 @@ public class HttpServer {
         var output = socket.getOutputStream();
 
         Request request = new HttpRequest(input);
-        System.out.println(request.getRequestAsText() + "\n");
+        System.out.println(request.getRequestAsText());
 
         Response response = new HttpResponse(output);
 
@@ -81,6 +90,16 @@ public class HttpServer {
 
         var processor = selectProcessor(uri);
         processor.process(request, response);
+
+        try {
+            System.out.println("THREAD:: doing work on thread: " + Thread.currentThread().getName() +
+                    "(id: " + Thread.currentThread().getId() + ")");
+            sleep(2000);
+            System.out.println("THREAD:: finished work on thread: " + Thread.currentThread().getName() +
+                    "(id: " + Thread.currentThread().getId() + ")");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         socket.close();
 
