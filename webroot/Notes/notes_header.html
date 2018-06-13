@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Notes</title>
+    <style>
+        .delete {}
+    </style>
+</head>
+<body>
+<br>
+My Notes:
+
+
+<p id="0">
+    note #0
+    <button class="delete">delete</button>
+</p>
+
+<p id="1">
+    note #0
+    <button class="delete">delete</button>
+</p>
+
+
+<script>
+    var paragraphs = document.querySelectorAll('p');
+    paragraphs.forEach(p => {
+
+        var delete_button = p.querySelector('.delete');
+        delete_button.onclick = () => { console.log('clicked delete'); };
+
+    });
+
+    // window.location.replace("http://stackoverflow.com");
+</script>
+
+</body>
+</html>
+
+
+
+

@@ -30,15 +30,10 @@ public class NotesContainer{
         }
         return notesCopy;
     }
-    
+
     public int size() { return _notes.size(); }
 
     public void clear() {
         _notes.clear();
     }
-
-    // TODO : is it possible to make deferred iteration thread safe?
-//    private Iterator<String> iterator() {
-
-
 }

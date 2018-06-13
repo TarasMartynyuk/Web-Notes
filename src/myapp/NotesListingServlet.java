@@ -15,8 +15,7 @@ public class NotesListingServlet extends AbstractServlet {
             "        <br>\n" +
             "My notes:\n";
 
-    static final String PAGE_FOOTER = "    </body>\n" +
-            "</html>";
+//    static final String PAGE_FOOTER_F
 
 
     @Override
