@@ -43,7 +43,8 @@ public class NotesListingServlet extends AbstractServlet {
     }
 
     private String generateNoteParagraph(Note note) {
-        return "<p id=\"" +note.getId() + "\">"  + note.getText() + "</p>";
+        return "<p id=\"" +note.getId() + "\">"  + note.getText() +
+                "         <button class=\"delete\">delete</button></p>";
     }
 
     private String readFileAsUtf8(Path path) throws IOException {
