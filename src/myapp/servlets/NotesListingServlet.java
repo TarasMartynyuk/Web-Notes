@@ -15,40 +15,18 @@ import java.nio.file.Paths;
 
 public class NotesListingServlet extends AbstractServlet {
 
-    static final String HEADER_FILENAME = "notes/header.html";
+    private final NoteListPageBuilder _noteListPageBuilder;
 
-    static final String FOOTER_FILENAME = "notes/footer.html";
+    public NotesListingServlet() {
+        _noteListPageBuilder = new NoteListPageBuilder();
+    }
 
     @Override
     public void service(Request req, Response res) throws IOException {
 
         var responseBuilder = new ResponseBuilder(res);
 
-        responseBuilder.WriteOkResponce(generateListPage(
+        responseBuilder.WriteOkResponce(_noteListPageBuilder.buildNotesListPage(
                 NotesContainer.getInstance().listNotes()), "text/html");
-    }
-
-    private String generateListPage(Iterable<Note> notes) throws IOException {
-        var builder = new StringBuilder();
-
-        builder.append(readFileAsUtf8(Paths.get(Constants.WEB_ROOT, HEADER_FILENAME)));
-
-        for(var note : notes) {
-            builder.append(generateNoteParagraph(note));
-        }
-
-        builder.append(readFileAsUtf8(Paths.get(Constants.WEB_ROOT, FOOTER_FILENAME)));
-
-        return builder.toString();
-    }
-
-    private String generateNoteParagraph(Note note) {
-        return "<p id=\"" +note.getId() + "\">"  + note.getText() +
-                "         <button class=\"delete\">delete</button></p>";
-    }
-
-    private String readFileAsUtf8(Path path) throws IOException {
-        byte[] contents = Files.readAllBytes(path);
-        return new String(contents, "UTF-8");
     }
 }

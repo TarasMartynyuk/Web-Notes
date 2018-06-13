@@ -1,5 +1,5 @@
 <script>
-    function postAndRedirect(url, body)
+    function post(url, body)
     {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
@@ -18,21 +18,20 @@
         }
 
         xhr.send(body_str);
-        // console.log(body_str);
     }
 
     const notes_delete_url = "/servlet/notes.delete";
+    const notes_list_url = "/servlet/notes.list";
+
 
     var paragraphs = document.querySelectorAll('p');
     paragraphs.forEach(p => {
 
         var delete_button = p.querySelector('.delete');
         delete_button.onclick = () =>  {
-            // var url = notes_delete_url + "?note_id=" + p.id.toString();
-            // window.location.replace(url);
             // console.log(url);
-
-            postAndRedirect(notes_delete_url, { note_id : p.id});
+            post(notes_delete_url, { note_id : p.id});
+            window.location.replace(notes_list_url);
         };
 
         //TODO: edit button callback

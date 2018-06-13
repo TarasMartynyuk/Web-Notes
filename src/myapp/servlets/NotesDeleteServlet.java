@@ -4,11 +4,18 @@ import http.server.Method;
 import http.server.request.Request;
 import http.server.response.Response;
 import http.server.servlet.AbstractServlet;
+import myapp.ResponseBuilder;
 import myapp.notes.NotesContainer;
 
 import java.io.IOException;
 
 public class NotesDeleteServlet extends AbstractServlet {
+
+    private final NoteListPageBuilder _noteListPageBuilder;
+
+    public NotesDeleteServlet() {
+        _noteListPageBuilder = new NoteListPageBuilder();
+    }
 
     @Override
     public void service(Request req, Response res) throws IOException, MissingParameterException {
@@ -24,7 +31,5 @@ public class NotesDeleteServlet extends AbstractServlet {
 
         int parsedId = Integer.parseInt(id);
         NotesContainer.getInstance().deleteNote(parsedId);
-
-        new NotesListingServlet().service(req, res);
     }
 }
