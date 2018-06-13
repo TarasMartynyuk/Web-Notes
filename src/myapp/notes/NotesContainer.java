@@ -1,12 +1,11 @@
-package myapp;
+package myapp.notes;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public class NotesContainer{
 
     private static NotesContainer ourInstance = new NotesContainer();
-    private ArrayList<String> _notes;
+    private ArrayList<Note> _notes;
 
     public static NotesContainer getInstance() {
         return ourInstance;
@@ -17,12 +16,12 @@ public class NotesContainer{
         _notes = new ArrayList<>();
     }
 
-    public synchronized void addNote(String note) {
+    public synchronized void addNote(Note note) {
         _notes.add(note);
     }
 
-    public synchronized Iterable<String> listNotes() {
-        var notesCopy = new ArrayList<String >(size());
+    public synchronized Iterable<Note> listNotes() {
+        var notesCopy = new ArrayList<Note>(size());
 
         for (int i = 0, last = size() - 1; i < size(); i++) {
 

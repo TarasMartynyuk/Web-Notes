@@ -1,17 +1,14 @@
-import myapp.NotesContainer;
+import myapp.notes.Note;
+import myapp.notes.NotesContainer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-
 public class NotesContainerTests {
 
-    static final String FIRST_NOTE = "First";
-    static final String SECOND_NOTE = "Second";
-    static final String THIRD_NOTE = "Third";
+    static final Note FIRST_NOTE = new Note("First");
+    static final Note SECOND_NOTE = new Note("Second");
+    static final Note THIRD_NOTE = new Note("Third");
 
     NotesContainer _testInstance = NotesContainer.getInstance();
 
@@ -27,8 +24,8 @@ public class NotesContainerTests {
     @Test
     public void ForEach_LastElement_MustBeFirstInsertedNote() {
 
-        String lastIterNote = null;
-        for (String note : _testInstance.listNotes()) {
+        Note lastIterNote = null;
+        for (var note : _testInstance.listNotes()) {
             lastIterNote = note;
         }
 
@@ -39,8 +36,8 @@ public class NotesContainerTests {
     public void ForEach_FirstElement_MustBeLastInsertedNote() {
 
         boolean firstRead = false;
-        String firstIterNote = null;
-        for (String note : _testInstance.listNotes()) {
+        Note firstIterNote = null;
+        for (var note : _testInstance.listNotes()) {
 
             if(! firstRead) {
                 firstIterNote = note;
