@@ -14,15 +14,16 @@ public class NotesAdditionServlet extends AbstractServlet {
     static final String NOTE_PARAM_NAME = "note";
 
     @Override
-    public void service(Request req, Response res) throws IOException {
+    public void service(Request req, Response res) throws IOException, MissingParameterException {
 
         if(req.getMethod() != Method.POST) {
+            System.out.println("NotesAdditionServlet recieved request with unexpected method : " + req.getMethod());
             return;
         }
 
         var note = req.getParameterOrNull(NOTE_PARAM_NAME);
         if(note == null) {
-            System.out.println("request body does note have param with name : " + NOTE_PARAM_NAME);
+            throw new MissingParameterException(NOTE_PARAM_NAME);
         }
 
         NotesContainer.getInstance().addNote(new Note(note));

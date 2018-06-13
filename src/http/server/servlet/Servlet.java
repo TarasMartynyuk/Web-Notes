@@ -3,6 +3,7 @@ package http.server.servlet;
 
 import http.server.request.Request;
 import http.server.response.Response;
+import myapp.servlets.MissingParameterException;
 
 import java.io.IOException;
 
@@ -16,6 +17,6 @@ public interface Servlet {
 
     void init();
 
-    void service(Request req, Response res) throws IOException;
+    void service(Request req, Response res) throws IOException, MissingParameterException;
     
 }

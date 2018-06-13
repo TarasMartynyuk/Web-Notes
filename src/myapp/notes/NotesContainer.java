@@ -1,6 +1,7 @@
 package myapp.notes;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class NotesContainer{
 
@@ -34,5 +35,17 @@ public class NotesContainer{
 
     public void clear() {
         _notes.clear();
+    }
+
+    public void deleteNote(int id) {
+        int index = IntStream.range(0, _notes.size())
+                .filter(i -> _notes.get(i).getId() == id)
+                .findFirst()
+                .orElse(-1);
+
+        if(index == -1) {
+            throw new IllegalArgumentException("no note with id: " + id);
+        }
+        _notes.remove(index);
     }
 }

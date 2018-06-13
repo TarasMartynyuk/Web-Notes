@@ -15,5 +15,6 @@ public class ServletsMap extends AbstractServletsMap {
         servlets.put("/test", new PrimitiveServlet());
         servlets.put("/notes.add", new NotesAdditionServlet());
         servlets.put("/notes.list", new NotesListingServlet());
+        servlets.put("/notes.delete", new NotesDeleteServlet());
     }
 }

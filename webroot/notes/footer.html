@@ -1,4 +1,26 @@
 <script>
+    function postAndRedirect(url, body)
+    {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        var body_str = "";
+
+        for (var key in body) {
+            if(body.hasOwnProperty(key)) {
+                body_str += key + "=" + body[key] + "&";
+            }
+        }
+        body_str = body_str.slice(0, -1);
+
+        if(body_str === "") {
+            console.error("body_str is empty");
+        }
+
+        xhr.send(body_str);
+        // console.log(body_str);
+    }
+
     const notes_delete_url = "/servlet/notes.delete";
 
     var paragraphs = document.querySelectorAll('p');
@@ -6,15 +28,17 @@
 
         var delete_button = p.querySelector('.delete');
         delete_button.onclick = () =>  {
-            var url = notes_delete_url + "?note_id=" + p.id.toString();
-            console.log(url);
+            // var url = notes_delete_url + "?note_id=" + p.id.toString();
+            // window.location.replace(url);
+            // console.log(url);
+
+            postAndRedirect(notes_delete_url, { note_id : p.id});
         };
 
         //TODO: edit button callback
-
     });
 
-    // window.location.replace("http://stackoverflow.com");
+    //
 </script>
 
 </body>
