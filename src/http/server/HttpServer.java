@@ -91,15 +91,15 @@ public class HttpServer {
         var processor = selectProcessor(uri);
         processor.process(request, response);
 
-        try {
-            System.out.println("THREAD:: doing work on thread: " + Thread.currentThread().getName() +
-                    "(id: " + Thread.currentThread().getId() + ")");
-            sleep(2000);
-            System.out.println("THREAD:: finished work on thread: " + Thread.currentThread().getName() +
-                    "(id: " + Thread.currentThread().getId() + ")");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            System.out.println("THREAD:: doing work on thread: " + Thread.currentThread().getName() +
+//                    "(id: " + Thread.currentThread().getId() + ")");
+//            sleep(2000);
+//            System.out.println("THREAD:: finished work on thread: " + Thread.currentThread().getName() +
+//                    "(id: " + Thread.currentThread().getId() + ")");
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         socket.close();
 
