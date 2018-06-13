@@ -15,7 +15,7 @@ public class ResponseBuilder {
         _out = writer;
     }
 
-    public void WriteOkResponce(String response, String contentType) {
+    public void writeOkResponce(String response, String contentType) {
         writeOkHeader();
         writeContentHeaders(response.length(), contentType);
         _out.write(response);

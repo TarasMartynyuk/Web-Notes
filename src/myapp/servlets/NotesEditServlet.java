@@ -1,5 +1,4 @@
 package myapp.servlets;
-
 import http.server.Method;
 import http.server.request.Request;
 import http.server.response.Response;
@@ -9,16 +8,11 @@ import myapp.notes.NotesContainer;
 
 import java.io.IOException;
 
-public class NotesDeleteServlet extends AbstractServlet {
-
-    private final NoteListPageBuilder _noteListPageBuilder;
-
-    public NotesDeleteServlet() {
-        _noteListPageBuilder = new NoteListPageBuilder();
-    }
+public class NotesEditServlet extends AbstractServlet {
 
     @Override
     public void service(Request req, Response res) throws IOException, MissingParameterException {
+
         if(req.getMethod() != Method.POST) {
             System.out.println("NotesDeleteServlet recieved request with unexpected method : " + req.getMethod());
             return;
@@ -28,9 +22,16 @@ public class NotesDeleteServlet extends AbstractServlet {
         if(id == null) {
             throw  new MissingParameterException("id");
         }
+        var intId = Integer.parseInt(id);
 
-        int parsedId = Integer.parseInt(id);
-        NotesContainer.getInstance().deleteNote(parsedId);
+        var newText = req.getParameterOrNull("note_text");
+        if(newText == null) {
+            throw  new MissingParameterException("new_text");
+        }
+
+//        System.out.println("changing text of #" +  id   + " to " + newText);
+
+        NotesContainer.getInstance().editNote(intId, newText);
 
         new ResponseBuilder(res).writeOkResponce("", "text/plain");
     }

@@ -18,7 +18,7 @@ public class HelloServlet extends AbstractServlet  {
         var responce = "Hello from Servlet";
 
         var builder = new ResponseBuilder(res);
-        builder.WriteOkResponce(responce, "text/html");
+        builder.writeOkResponce(responce, "text/html");
 
         res.getWriter().close();
 

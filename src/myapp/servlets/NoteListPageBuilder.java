@@ -28,8 +28,13 @@ public class NoteListPageBuilder {
     }
 
     private String generateNoteParagraph(Note note) {
-        return "<p id=\"" +note.getId() + "\">"  + note.getText() +
-                "         <button class=\"delete\">delete</button></p>";
+        return "<p id=\"" + note.getId() +  "\">\n" +
+                "    <span contenteditable=\"true\">" + note.getText() + "</span>\n" +
+                "\n" +
+                "    <button class=\"delete\">delete</button>\n" +
+                "\n" +
+                "    <button class=\"edit\">edit</button>\n" +
+                "</p>";
     }
 
     private String readFileAsUtf8(Path path) throws IOException {

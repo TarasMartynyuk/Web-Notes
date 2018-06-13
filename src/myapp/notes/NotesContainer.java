@@ -38,14 +38,25 @@ public class NotesContainer{
     }
 
     public void deleteNote(int id) {
-        int index = IntStream.range(0, _notes.size())
-                .filter(i -> _notes.get(i).getId() == id)
-                .findFirst()
-                .orElse(-1);
-
+        int index = getIndexOfNote(id);
         if(index == -1) {
             throw new IllegalArgumentException("no note with id: " + id);
         }
         _notes.remove(index);
+    }
+
+    public void editNote(int id, String newText) {
+        int index = getIndexOfNote(id);
+        if(index == -1) {
+            throw new IllegalArgumentException("no note with id: " + id);
+        }
+        _notes.get(index).setText(newText);
+    }
+
+    private int getIndexOfNote(int nodeId) {
+        return IntStream.range(0, _notes.size())
+                .filter(i -> _notes.get(i).getId() == nodeId)
+                .findFirst()
+                .orElse(-1);
     }
 }

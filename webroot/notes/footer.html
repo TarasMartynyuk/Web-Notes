@@ -22,25 +22,34 @@
 
     const notes_delete_url = "/servlet/notes.delete";
     const notes_list_url = "/servlet/notes.list";
+    const notes_edit_url = "/servlet/notes.edit";
 
 
-    var paragraphs = document.querySelectorAll('p');
+    let paragraphs = document.querySelectorAll('p');
     paragraphs.forEach(p => {
 
-        var delete_button = p.querySelector('.delete');
-        delete_button.onclick = () =>  {
-            // console.log(url);
-            post(notes_delete_url, { note_id : p.id});
-            window.location.replace(notes_list_url);
-        };
+        // var delete_button = p.querySelector('.delete');
+        // delete_button.onclick = () =>  {
+        //     // console.log(url);
+        //     post(notes_delete_url, { note_id : p.id});
+        //     window.location.replace(notes_list_url);
+        // };
 
-        //TODO: edit button callback
+        let edit_button = p.querySelector('.edit');
+        edit_button.onclick = () => {
+            let note_text = p.querySelector('span');
+            let new_text = note_text.textContent;
+
+            post(notes_edit_url, {
+                note_id : p.id,
+                note_text : new_text
+            });
+        }
     });
 
     //
 </script>
 
-</body>
 </html>
 
 
