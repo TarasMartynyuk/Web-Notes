@@ -37,7 +37,7 @@ public class NotesContainer{
         _notes.clear();
     }
 
-    public void deleteNote(int id) {
+    public synchronized void deleteNote(int id) {
         int index = getIndexOfNote(id);
         if(index == -1) {
             throw new IllegalArgumentException("no note with id: " + id);
@@ -45,7 +45,7 @@ public class NotesContainer{
         _notes.remove(index);
     }
 
-    public void editNote(int id, String newText) {
+    public synchronized void editNote(int id, String newText) {
         int index = getIndexOfNote(id);
         if(index == -1) {
             throw new IllegalArgumentException("no note with id: " + id);

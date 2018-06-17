@@ -26,14 +26,15 @@
 
 
     let paragraphs = document.querySelectorAll('p');
+
     paragraphs.forEach(p => {
 
-        // var delete_button = p.querySelector('.delete');
-        // delete_button.onclick = () =>  {
-        //     // console.log(url);
-        //     post(notes_delete_url, { note_id : p.id});
-        //     window.location.replace(notes_list_url);
-        // };
+        var delete_button = p.querySelector('.delete');
+        delete_button.onclick = () =>  {
+            // console.log(url);
+            post(notes_delete_url, { note_id : p.id});
+            window.location.replace(notes_list_url);
+        };
 
         let edit_button = p.querySelector('.edit');
         edit_button.onclick = () => {
@@ -44,6 +45,7 @@
                 note_id : p.id,
                 note_text : new_text
             });
+            window.location.replace(notes_list_url);
         }
     });
 
